@@ -1,3 +1,10 @@
+#define rep(i, a, b) for(int i = a; i < (b); ++i)
+#define all(x) begin(x), end(x)
+#define sz(x) (int)(x).size()
+typedef long long ll;
+typedef pair<int, int> pii;
+typedef vector<int> vi;
+ 
 const ll mod = (119 << 23) + 1, root = 62; // = 998244353
 // For p < 2^30 there is also e.g. 5 << 25, 7 << 26, 479 << 21
 // and 483 << 21 (same root). The last two are > 10^9.
@@ -39,3 +46,4 @@ vl conv(const vl &a, const vl &b) {
 	ntt(out);
 	return {out.begin(), out.begin() + s};
 }
+ 
