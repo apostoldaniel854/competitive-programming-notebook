@@ -1,0 +1,70 @@
+<snippet>
+	<content><![CDATA[
+vector < int > v[Max];
+vector < int > vt[Max];
+int n,m;
+
+void read()
+{
+    f>>n>>m;
+    int i;
+    for(i=1;i<=m;i++)
+    {
+        int n1,n2;
+        f>>n1>>n2;
+        v[n1].push_back(n2);
+        vt[n2].push_back(n1);
+    }
+}
+vector < int > ordine;
+int viz[Max];
+void dfs(int nod)
+{
+    if(viz[nod] == 0)
+    {
+
+        viz[nod] = 1;
+        for(auto vec : v[nod])
+            dfs(vec);
+        ordine.push_back(nod);
+    }
+}
+int compo[Max];
+void baga(int who, int where)
+{
+    if(compo[who] == 0)
+    {
+        compo[who] = where;
+        for(auto vec : vt[who])
+            baga(vec,where);
+    }
+}
+int current_comp_id;
+void ctc()
+{
+    int i;
+    current_comp_id = 0;
+    for(auto candidat : ordine)
+    {
+        if(compo[candidat] == 0)
+        {
+            ++current_comp_id;
+            baga(candidat,current_comp_id);
+        }
+    }
+}
+void compute_CTC()
+{
+    int i;
+    for(i=1;i<=n;i++)
+        if(viz[i] == 0)
+        dfs(i);
+    reverse(ordine.begin(),ordine.end());
+    ctc();
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<!-- <tabTrigger>hello</tabTrigger> -->
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

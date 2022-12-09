@@ -1,0 +1,85 @@
+<snippet>
+	<content><![CDATA[
+/* Airinei Andrei Cristian grupa 152
+    compilator: MinGW versiunea w64 9.0
+    tutore laborator: Stefan-Eduard Deaconu
+ */
+#include <bits/stdc++.h>
+using namespace std;
+
+class IoBase {
+public:
+    virtual istream &read(istream &is) {
+        return is;
+    }
+
+    virtual ostream &write(ostream &os) const {
+        return os;
+    }
+
+    friend istream &operator>>(istream &is, IoBase &base) {
+        return base.read(is);
+    }
+
+    friend ostream &operator<<(ostream &os, const IoBase &base) {
+        return base.write(os);
+    }
+};
+
+//singleton
+class Meniu{
+private:
+    Meniu() {}
+public:
+    static Meniu* instance;
+    static Meniu* getInstance(){
+        if(instance != nullptr)
+            return instance;
+        instance = new Meniu;
+        return instance;
+    }
+private:
+    void listOptions(){
+        cout << "Alege optiunea din Meniu\n";
+        cout << "1.Adauga\n";
+
+        cout << "8.Exit\n";
+    }
+public:
+    void run(){
+        while(true){
+            listOptions();
+            int op;
+            cin >> op;
+            if(op == 1){
+
+            }else if(op == 2){
+
+            }else if(op == 3){
+
+            }else if(op == 4){
+
+            }else if(op == 8){
+                break;
+            }
+            else{
+                cout << "optiune invalida\n";
+                cout << "try again\n";
+            }
+        }
+        cout << "Program incheiat cu succes\n";
+    }
+};
+Meniu* Meniu :: instance = nullptr;
+
+
+int main(){
+    auto menu = Meniu::getInstance();
+    menu -> run();
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<!-- <tabTrigger>hello</tabTrigger> -->
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

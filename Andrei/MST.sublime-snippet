@@ -1,0 +1,67 @@
+<snippet>
+	<content><![CDATA[class dsu{
+private: 
+	vector < int > parent;
+	vector < int > rang;
+public:
+	void init_empty(int n)
+	{
+		parent.resize(n + 1);
+		rang.resize(n + 1);
+		for(int i=1;i<=n;i++)
+			parent[i] = i,rang[i] = 1;
+	}
+	int find(int x)
+	{
+		int nod	,y;
+		for(nod = x;parent[nod] != nod;nod = parent[nod]);
+		while(parent[x] != x)
+		{
+			y = parent[x];
+			parent[x] = nod;
+			x = y;
+		}
+		return nod;
+	}
+	bool merge(int x, int y)
+	{
+		x = find(x);
+		y = find(y);
+		if(x == y)
+			return 0;
+		if(rang[x] > rang[y])
+			parent[y] = x;
+		else
+			parent[x] = y;
+		if(rang[x] == rang[y])
+			rang[y] ++;	
+		return 1;
+	}
+};
+struct muchie{
+	int n1,n2;
+	int cost;
+};
+int compute_MST(vector < muchie > muchii,int node_cnt)
+{
+	//returns the cost of the MSC
+	dsu DSU;
+	sort(muchii.begin(), muchii.end(),[](muchie m1, muchie m2){return m1.cost < m2.cost;});
+	long long MST_cost = 0;
+	DSU.init_empty(node_cnt);
+	vector < pair < int , int > > used;
+	for(auto mu : muchii)
+		if(DSU.merge(mu.n1,mu.n2))
+		{
+			MST_cost += mu.cost;
+			used.push_back({mu.n1,mu.n2});
+		}
+		assert(used.size() == node_cnt -1);
+	return MST_cost;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<!-- <tabTrigger>hello</tabTrigger> -->
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

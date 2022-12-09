@@ -1,0 +1,19 @@
+<snippet>
+	<content><![CDATA[
+struct pq_elem{
+	int val;
+};
+bool operator < (const pq_elem& p1, const pq_elem& p2)
+{
+	//operator overload
+	//return true daca p2 are prioritate mai mare decat p1 
+	//conditia pe dos
+	return p1.val > p2.val;
+}
+priority_queue < pq_elem > pq;
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<!-- <tabTrigger>hello</tabTrigger> -->
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

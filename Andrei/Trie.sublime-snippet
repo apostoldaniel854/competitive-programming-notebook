@@ -1,0 +1,112 @@
+<snippet>
+	<content><![CDATA[
+namespace Trie{
+
+	const int Child_cnt = 26;
+	struct  Nod
+	{
+		Nod* child[Child_cnt];
+		int cnt;
+		//pointer to childs, count for number of strings that end here
+	}*root;
+	//change for other data types
+	const char offset = 'a';
+
+	Nod* Create()
+	{
+
+		Nod* new_nod = new Nod;
+		for(int i=0;i<Child_cnt;++i)
+			new_nod -> child[i] = NULL;
+		new_nod -> cnt = 0;
+		return new_nod;
+	}
+	void InitTrie()
+	{
+		//make sure to call this or it goes kaboom
+		root = Create();
+
+	}
+	bool is_leaf(Nod* nod)
+	{
+		for(int i=0;i<Child_cnt;++i)
+			if(nod -> child[i])
+				return false;
+		return true;
+	}
+	void insert(char *key)
+	{
+		Nod* current = root;
+		//to not alter the root
+		for(int i=0;key[i];++i)
+		{
+			int index = key[i] - offset;
+			//a for char, need to change for sth else;
+			if(current -> child[index])
+				current = current -> child[index];
+			else
+			{
+				Nod * new_node = Create();
+				current ->child[index] = new_node;
+				current = current -> child[index];
+			}
+		}
+		current -> cnt ++;
+	}
+	bool del_rec(Nod* current,char*key)
+	{
+		if(*key)
+		{
+			//intermediate node
+			int index = key[0] - offset;
+			if(del_rec(current->child[index],key + 1))
+				current ->child[index] = NULL;
+		}
+		else
+		current -> cnt --;
+		if(is_leaf(current) and current != root and current->cnt == 0)
+		{
+			return 1;
+			delete current;
+		}
+		return 0;
+	}
+	void delete_one_aparition(char *key)
+	{
+		//apeleaza doar daca sigur exista in sir
+		del_rec(root,key);
+	}
+	int number_of_aparitions(char *key)
+	{
+		if(is_leaf(root))
+			return 0;
+		//nothing in trie
+		Nod* current = root;
+		for(int i=0;key[i];++i)
+		{
+			int index = key[i] - offset;
+			if(current -> child[index] == NULL)
+			{
+				return 0;
+				//trie not build further
+			}
+			current = current -> child[index];
+		}
+		return current -> cnt;
+	}
+	int longest_prefix(char *key)
+	{
+		if(is_leaf(root))
+			return 0;
+		int i = 0;
+		for(Nod* current = root;key[i] and current -> child[key[i] - offset];++i)
+			current = current -> child[key[i] - offset];
+		return i ;
+	}
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	 <!--<tabTrigger>Trie</tabTrigger> -->
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

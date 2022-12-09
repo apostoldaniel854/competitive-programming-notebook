@@ -1,0 +1,46 @@
+<snippet>
+	<content><![CDATA[
+#include <bits/stdc++.h>
+using namespace std;
+#define f cin
+#define g cout
+#define int long long
+const int Max = 1e5 + 1;
+void nos()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+}
+void read()
+{
+    
+}
+void solve()
+{
+
+}
+void restart()
+{
+    cout<<'\n';
+}
+int32_t main()
+{
+    nos();
+    int teste;
+    f>>teste;
+    int cases = 1;
+    while(teste--)
+    {
+    	cout<<"Case #"<<cases++<<": ";
+        read();
+        solve();
+        restart();
+    }
+    return 0;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>GoogleKickStart</tabTrigger> 
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

@@ -1,0 +1,51 @@
+<snippet>
+	<content><![CDATA[
+long long  LargestRectangularAreaInHistogram(vector< int > a)
+{
+    int i;
+    int sz = a.size();
+    while(!s1.empty())
+        s1.pop();
+    while(!s2.empty())
+        s2.pop();
+    for(i=0;i<sz;i++)
+    {
+        while(!s1.empty() and s1.top().first > a[i])
+        {
+            dreapta[s1.top().second] = i - 1;
+            s1.pop();
+        }
+        s1.push({a[i],i});
+        //vad pt fiecare cat pot merge la dreapta
+    }
+    while(!s1.empty())
+    {
+        dreapta[s1.top().second] = sz - 1;
+        s1.pop();
+    }
+    for(i=sz - 1;i>=0;i--)
+    {
+        while(!s2.empty() and s2.top().first > a[i])
+        {
+            stanga[s2.top().second] = i + 1;
+            s2.pop();
+        }
+        //vad pt fiecare cat pot merge la stanga
+        s2.push({a[i],i});
+    }
+    while(!s2.empty())
+    {
+        stanga[s2.top().second] = 0;
+        s2.pop();
+    }
+    long long  ans = 0;
+    for(i = 0;i<sz;i++)
+         ans = max(ans,1LL * a[i] * (dreapta[i] - stanga[i] + 1));
+        return ans;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<!-- <tabTrigger>hello</tabTrigger> -->
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

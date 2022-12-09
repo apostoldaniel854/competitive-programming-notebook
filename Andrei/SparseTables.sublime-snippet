@@ -1,0 +1,51 @@
+<snippet>
+	<content><![CDATA[
+namespace SparseTables{
+	int ST[21][Max];
+	int n;
+	int merge(int a, int b)
+	{
+		//edit merge for diferent function
+		return min(a,b);
+	}
+	void Init(std::vector< int > v)
+	{
+		int i,j;
+		n = v.size() - 1;
+		for(i=0;i<=n;++i)
+			ST[0][i] = v[i];
+		for( i = 1; (1<<i) - 1 <= n;++i){
+			for(j = 0; j + (1<<i) - 1 <= n;++j)
+				ST[i][j] = merge(ST[i-1][j],ST[i-1][j + (1<<(i-1))]);
+		}	
+	}
+	int ConstantQuery(int left, int right)
+	{
+		//check if it works
+		if(left > right)
+			swap(left,right);
+		int k = log2(right-left+1);
+		return merge(ST[k][left],ST[k][right - (1<<k) + 1]);
+	}
+	int StandardQuery(int left, int right)
+	{
+		if(left > right)
+			swap(left,right);
+		int k = log2(right-left+1);
+		int ans = ST[k][left];
+		left += (1<<k);
+		while(left <= right)
+		{
+			k = log2(right-left+1);
+			ans = merge(ans,ST[k][left]);
+			left += (1<<k);
+		}
+		return ans;
+	}
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<!--<tabTrigger>SparseTable</tabTrigger> -->
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

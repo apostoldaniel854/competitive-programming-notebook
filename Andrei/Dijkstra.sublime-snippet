@@ -1,0 +1,43 @@
+<snippet>
+	<content><![CDATA[
+struct pq_elem{
+	int cost;
+	int nod;
+};
+bool operator < (const pq_elem& p1, const pq_elem& p2)
+{
+	return p1.cost > p2.cost;
+}
+priority_queue < pq_elem > pq;
+void Dijkstra(int start,int d[])
+{
+	int i;
+	for(i=1;i<=n;i++)
+		d[i] = INT_MAX;
+	d[start] = 0;
+	pq.push({0,start});
+	while(!pq.empty())
+	{
+		pq_elem state = pq.top();
+		pq.pop();
+		if(d[state.nod] != state.cost)
+			continue;
+		int nod = state.nod;
+		for(auto vec : v[nod])
+		{
+			int n_cost = d[nod] + vec.second;
+			int dest = vec.first;
+			if(n_cost < d[dest])
+			{
+				d[dest] = n_cost;
+				pq.push({n_cost,dest});
+			}
+		}
+	}
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<!-- <tabTrigger>hello</tabTrigger> -->
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

@@ -1,0 +1,79 @@
+<snippet>
+	<content><![CDATA[
+namespace SegmentTree{
+    struct Node{
+        int val;
+    }tree[4*Max];
+    int rev[Max];
+    Node merge(Node n1, Node n2)
+    {
+        Node ans;
+        ans.val = max(n1.val,n2.val);
+        return ans;
+    }
+    //remember to call init and update n
+    int n;
+    void init(int where , int left, int right,int a[])
+    {
+        if(left == right)
+        {
+            tree[where].val = a[left];
+            rev[left] = where;
+            return;
+        }
+        int mid = (left + right) / 2;
+        init(2*where,left,mid,a);
+        init(2*where + 1,mid+1,right,a);
+        tree[where] = merge(tree[2*where],tree[2*where+1]);
+    }
+    void propagate(int where)
+    {
+        if(where)
+        {
+            tree[where] = merge(tree[2*where],tree[2*where+1]);
+            propagate(where / 2);
+        }
+    }
+    void Update(int pos,int val)
+    {
+        int pos_in_tree = rev[pos];
+        tree[pos_in_tree].val = val;
+        propagate(pos_in_tree / 2);
+    }
+    int left_limit,right_limit;
+    vector<Node> elem;
+    void QueryRange(int where, int left, int right)
+    {
+        if(left_limit <= left and right <= right_limit)
+        {
+            //sunt pe o pozitie pe care pot considera nodul
+            elem.push_back(tree[where]);
+            return;
+        }
+        int mid = (left + right) / 2;
+        if(left_limit <= mid)
+            QueryRange(2*where,left,mid);
+        if(mid + 1 <= right_limit)
+            QueryRange(2*where + 1, mid + 1,right);
+    }
+    int Query(int left, int right)
+    {
+        left_limit = left;
+        right_limit = right;
+        elem.clear();
+        QueryRange(1,1,n);
+        if(elem.empty())
+            return 0 ;
+        Node ans = elem[0];
+        for(int i = 1; i < elem.size();i++)
+            ans = merge(ans,elem[i]);
+        return ans.val;
+    }
+
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<!-- <tabTrigger>SegmentTree</tabTrigger> -->
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

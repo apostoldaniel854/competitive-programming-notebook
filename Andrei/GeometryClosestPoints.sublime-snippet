@@ -1,0 +1,49 @@
+<snippet>
+	<content><![CDATA[
+namespace GeometryClosestPoints{
+
+	#define puncte vector<pair < int , int > >
+	int dist(pair < int , int > p1, pair < int , int > p2)
+	{
+		//patratul distantei
+		return (p1.first - p2.first) * (p1.first - p2.first) + (p1.second - p2.second) * (p1.second - p2.second);
+	}
+	puncte v;
+	int CPrec(int left, int right,puncte &x,puncte &y)
+	{
+		if(left >= right - 1)
+			return LLONG_MAX;
+		if(right - left == 2){
+			if(y[left] > y[left+1])
+				swap(y[left],y[left + 1]);
+			return dist(x[left],x[left + 1]);
+		}
+		int mid = (left +  right) / 2;
+		int best = min(CPrec(left,mid,x,y),CPrec(mid,right,x,y));
+		merge(y.begin()+left,y.begin() + mid,y.begin() + mid,y.begin() + right,v.begin());
+		copy(v.begin(),v.begin() + (right - left),y.begin() + left);
+		int vpoint = 0;
+		for(int i = left; i<right;++i)
+			if(abs(y[i].second - x[mid].first) <= best)
+				v[vpoint++] = y[i];
+		for(int i = 0;i<vpoint;++i)
+			for(int j = i + 1;j<vpoint and j-i < 8;++j)
+				best = min(best,dist(v[i],v[j]));
+		return best;
+	}
+	long double ClosestPoints(puncte points)
+	{
+		sort(points.begin(), points.end());
+		puncte y(points.size());
+		for(int i=0;i<points.size();++i)
+			y[i] = {points[i].second,points[i].first};
+		v.resize(points.size() + 1);
+		return sqrt(CPrec(0,points.size(),points,y));
+	}
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<!-- <tabTrigger>hello</tabTrigger> -->
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

@@ -1,0 +1,83 @@
+<snippet>
+	<content><![CDATA[
+namespace SparseTables{
+	const int Lmax = 1e6;
+	struct Node{
+		int depth;
+		int node;
+	} ST[21][Lmax];
+	int n;
+	Node merge(Node a, Node b)
+	{
+		//edit merge for diferent function
+		if(a.depth < b.depth)
+			return a;
+		return b;
+	}
+	void Init(std::vector< Node > v)
+	{
+		int i,j;
+		n = v.size() - 1;
+		for(i=0;i<=n;++i)
+			ST[0][i] = v[i];
+		for( i = 1; (1<<i) - 1 <= n;++i){
+			for(j = 0; j + (1<<i) - 1 <= n;++j)
+				ST[i][j] = merge(ST[i-1][j],ST[i-1][j + (1<<(i-1))]);
+		}	
+	}
+	Node ConstantQuery(int left, int right)
+	{
+		//check if it works
+		if(left > right)
+			swap(left,right);
+		int k = log2(right-left+1);
+		return merge(ST[k][left],ST[k][right - (1<<k) + 1]);
+	}
+}
+namespace LCA{
+	vector < SparseTables::Node > parcurg;
+	bitset < Max > viz;
+	vector < int > first_apar;
+	vector < int > last_apar;
+	void dfs(int node, int depth,vector < int > Graph[])
+	{
+		viz[node] = true;
+		parcurg.push_back({depth,node});
+		first_apar[node] = parcurg.size() - 1;
+		for(auto vec : Graph[node])
+			if(viz[vec] == false)
+		{
+			dfs(vec,depth + 1,Graph);
+			parcurg.push_back({depth,node});
+		}
+		last_apar[node] = parcurg.size() - 1;
+	}
+
+	void precompute(vector < int > Graph[], int n)
+	{
+		parcurg.clear();
+		first_apar.resize(n + 1);
+		last_apar.resize(n + 1);
+		for(int i=1;i<=n;i++)
+		{
+			first_apar[i] = last_apar[i] = -1;
+			viz[i] = false;
+		}
+		
+		int root = 1;
+		dfs(root,1,Graph);
+		SparseTables::Init(parcurg);
+	}
+	int get_LCA(int n1,int n2)
+	{
+		int left = min(first_apar[n1],first_apar[n2]);
+		int right = max(last_apar[n1],last_apar[n2]);
+		return SparseTables::ConstantQuery(left,right).node;
+	}
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<!-- <tabTrigger>hello</tabTrigger> -->
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

@@ -1,0 +1,46 @@
+<snippet>
+	<content><![CDATA[
+class dsu{
+private: 
+	vector < int > parent;
+	vector < int > rang;
+public:
+	void init_empty(int n)
+	{
+		parent.resize(n + 1);
+		rang.resize(n + 1);
+		for(int i=1;i<=n;i++)
+			parent[i] = i,rang[i] = 1;
+	}
+	int find(int x)
+	{
+		int nod	,y;
+		for(nod = x;parent[nod] != nod;nod = parent[nod]);
+		while(parent[x] != x)
+		{
+			y = parent[x];
+			parent[x] = nod;
+			x = y;
+		}
+		return nod;
+	}
+	void merge(int x, int y)
+	{
+		x = find(x);
+		y = find(y);
+		if(x == y)
+			return;
+		if(rang[x] > rang[y])
+			parent[y] = x;
+		else
+			parent[x] = y;
+		if(rang[x] == rang[y])
+			rang[y] ++;	
+	}
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<!-- <tabTrigger>hello</tabTrigger> -->
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

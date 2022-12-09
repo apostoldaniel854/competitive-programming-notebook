@@ -1,0 +1,117 @@
+<snippet>
+	<content><![CDATA[
+namespace lazytree{
+	int n;
+	struct Node{
+		int val = 0;
+		int lazy = 0;
+	}tree[4*Max];
+	//set left_limit and right_limit before update or query
+	int left_limit,right_limit;
+	Node  merge(Node n1,Node n2)
+	{
+		Node ans; 
+		ans.lazy = 0;
+		ans.val = min(n1.val,n2.val);
+		return ans;
+	}
+	void propagate(Node &nod,int lazy)
+	{
+		nod.val += lazy;
+		nod.lazy += lazy;
+	}
+	void UpdateRange(int where, int left, int right,int val)
+	{
+	//	cout<<"update\n";
+		//cout<<where<<' '<<left<<' '<<right<<"are valoarea " << tree[where].val<<'\n';
+		//lazy propagation
+		if(left!=right and tree[where].lazy)
+		{
+			propagate(tree[2*where],tree[where].lazy);
+			propagate(tree[2*where + 1],tree[where].lazy);
+			tree[where].lazy = 0;
+		}
+		if(left_limit <= left and right <= right_limit)
+		{
+			//sunt pe o pozitie pe care pot actualiza nodul
+			tree[where].val += val;
+			tree[where].lazy += val;
+			return;
+		}
+		int mid = (left + right) / 2;
+		if(left_limit <= mid)
+			UpdateRange(2*where,left,mid,val);
+		if(mid + 1 <= right_limit)
+			UpdateRange(2*where + 1, mid + 1,right,val);
+		tree[where] = merge(tree[2*where],tree[2*where + 1]);
+	}
+	void CheckTree(int where, int left , int right)
+	{
+		cout<<left<<' '<<right<<' '<<tree[where].val<<'\n';
+		if(left == right)
+			return;
+		int mid = (left + right) / 2;
+		CheckTree(2*where,left,mid);
+		CheckTree(2*where+1,mid + 1,right);
+	}
+	void Update(int left, int right,int val)
+	{
+		left_limit = left;
+		right_limit = right;
+		UpdateRange(1,1,n,val);
+	}
+	vector < Node > elem;
+	void QueryRange(int where, int left, int right)
+	{
+		//cout<<"here";
+		if(left!=right and tree[where].lazy)
+		{
+			propagate(tree[2*where],tree[where].lazy);
+			propagate(tree[2*where + 1],tree[where].lazy);
+			tree[where].lazy = 0;
+		}
+		if(left_limit <= left and right <= right_limit)
+		{
+			//sunt pe o pozitie pe care pot actualiza nodul
+			elem.push_back(tree[where]);
+			return;
+		}
+		int mid = (left + right) / 2;
+		if(left_limit <= mid)
+			QueryRange(2*where,left,mid);
+		if(mid + 1 <= right_limit)
+			QueryRange(2*where + 1, mid + 1,right);
+	}
+	int Query(int left, int right)
+	{
+		left_limit = left;
+		right_limit = right;
+		elem.clear();
+		QueryRange(1,1,n);
+		if(elem.empty())
+			return 0 ;
+		Node ans = elem[0];
+		for(int i = 1; i < elem.size();i++)
+			ans = merge(ans,elem[i]);
+		return ans.val;
+	}
+	void Init(int where, int left, int right,int a[])
+	{
+		if(left == right)
+		{
+			//a denumire aluia de unde se preiau valorile
+			tree[where].val = a[left];
+			return;
+		}
+		int mid = (left + right) / 2;
+		Init(2*where,left,mid,a);
+		Init(2*where + 1,mid + 1,right,a);
+		tree[where] = merge(tree[2*where],tree[2*where+1]);
+	}
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<!-- <tabTrigger>LazyTree</tabTrigger> -->
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

@@ -1,0 +1,25 @@
+<snippet>
+	<content><![CDATA[
+int chartoint(char *p)
+{
+	int i = 0;
+	int ans = 0;
+	bool minus = false;
+	if(p[i] == '-')
+	{
+		minus = true;
+		i++;
+	}
+	for(;p[i];i++)
+		ans = ans * 10 + (p[i] - '0');
+	
+	if(minus)
+		ans *= -1;
+	return ans;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<!-- <tabTrigger>ConvertCharToInt</tabTrigger> -->
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>
